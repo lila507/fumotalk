@@ -1,4 +1,4 @@
-# fumo.py v3 —— token级混合文本引擎 + 数字朗读 + 完整罗马音表 + 真分块修复
+# sakufumo.py  —— token级混合文本引擎 + 数字朗读 + 完整罗马音表 + 分块修复
 import ctypes
 import os
 import sys
@@ -9,7 +9,7 @@ import wave as wv
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-# ==================== 1. 映射表 ====================
+# 1. 映射表
 def load_mapping(tsv_path):
     m = {}
     with open(tsv_path, 'r', encoding='utf-8') as f:
@@ -22,7 +22,7 @@ def load_mapping(tsv_path):
     return m
 
 
-# ==================== 2. 罗马音→片假名（完整表） ====================
+# 2. 罗马音→片假名
 _ROMAJI_TABLE = [
     # 三字符拗音
     ("tsu", "ツ"),
@@ -80,7 +80,7 @@ def romaji_to_katakana(text):
                 matched = True
                 break
         if not matched:
-            # 无法匹配的字符（如 c, x, q 等单独辅音）→ 用最接近的假名替代
+            # 无法匹配的字符（如单独辅音）用最接近的假名替代
             fallback = {
                 'c': 'ク', 'x': 'クス', 'q': 'ク', 'v': 'ブ',
                 'l': 'ル', 'r': 'ル', 'b': 'ブ', 'd': 'ド',
@@ -94,7 +94,7 @@ def romaji_to_katakana(text):
     return ''.join(result)
 
 
-# ==================== 3. 数字→朗读 ====================
+# 3. 数字→朗读 
 _DIGIT_MAP = {
     '0': 'リン', '1': 'イー', '2': 'エー', '3': 'サン', '4': 'スー',
     '5': 'ウー', '6': 'リュウ', '7': 'チー', '8': 'バー', '9': 'ジュウ',
@@ -106,7 +106,7 @@ def digits_to_kana(num_str):
     return ''.join(_DIGIT_MAP.get(ch, ch) for ch in num_str)
 
 
-# ==================== 4. Token 化引擎 ====================
+# 4. Token 化引擎
 def tokenize(text):
     """
     将混合文本拆成 token 流，每个 token 带类型：
@@ -214,7 +214,7 @@ def zh_to_kana(text, mapping):
     return mixed_text_to_kana(text, mapping)
 
 
-# ==================== 5. AquesTalk 封装 ====================
+# 5. AquesTalk 封装
 class AQTK_VOICE(ctypes.Structure):
     _fields_ = [
         ("bas", ctypes.c_int), ("spd", ctypes.c_int), ("vol", ctypes.c_int),
@@ -233,7 +233,7 @@ VOICE_PRESETS = {
     "r2": AQTK_VOICE(1, 70, 100, 50, 50, 50, 180),
 }
 
-MAX_KANA_LEN = 180  # AquesTalk10 安全上限
+MAX_KANA_LEN = 180  # AquesTalk10 疑似安全上限
 
 
 class AquesTalk:
@@ -308,7 +308,7 @@ class AquesTalk:
         return out_path
 
 
-# ==================== 6. 播放 ====================
+# 6. 播放
 def play_wav(filepath):
     import platform
     if platform.system() == 'Windows':
@@ -318,7 +318,7 @@ def play_wav(filepath):
         os.system(f'afplay "{filepath}"' if platform.system() == 'Darwin' else f'aplay "{filepath}"')
 
 
-# ==================== 7. 主流程 ====================
+# 7. 主流程
 def main():
     tsv_path = os.path.join(BASE_DIR, 'mapping.tsv')
     dll_path = os.path.join(BASE_DIR, 'lib64', 'AquesTalk.dll')
