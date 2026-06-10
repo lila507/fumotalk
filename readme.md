@@ -11,7 +11,6 @@
 
 ## 🧠 工作原理 / しくみ
 
-```
 中文文本（可含英文/数字）
   ↓ pypinyin 分词 + 拼音转换
   ↓ mapping.tsv 拼音→片假名映射
@@ -21,7 +20,7 @@
   ↓ AquesTalk_Synthe_Utf8 (DLL)
   ↓ 16kHz 16bit WAV
   ↓ winsound 播放 / 写入 output.wav
-```
+
 
 **示例 / 例：**
 
@@ -36,7 +35,6 @@
 
 ## 文件结构 / ファイル構成
 
-```
 fumotalk/
 ├── sakufumo.py          ← 主程序（中文→空耳→合成→播放）
 ├── mapping.tsv          ← 拼音→片假名映射表 (pinyin-to-kana)
@@ -47,8 +45,7 @@ fumotalk/
 ├── output.wav           ← 每次运行自动生成
 ├── aqtk10_win_man.pdf   ← AquesTalk10 使用マニュアル
 ├── siyo_onseikigou.pdf  ← 音声記号列仕様
-└── README.md            ← 本文件
-```
+└── README.md            ← readme
 
 ---
 
