@@ -1,0 +1,7 @@
+# Generated audio output
+output.wav
+*.wav
+
+# Python
+__pycache__/
+*.pyc
